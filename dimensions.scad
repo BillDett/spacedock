@@ -72,3 +72,4 @@ ball_trench_height = 0.0315 * radius;
 
 $fa=1;
 $fs=0.01;
+$fn=50;
