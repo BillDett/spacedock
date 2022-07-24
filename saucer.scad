@@ -4,32 +4,40 @@ include <dimensions.scad>
 module saucer(radius, height) {
     // All measurements are based on radius
     hole = 0.03 * radius;
-    w = .06 * radius;
     rad1 = .41428 * radius;    // Top radius
     rad2 = 0.98571 * radius;    // Rim radius
-    h2 = 0.05857 * radius;       // Rim height  
+    h2 = 0.04857 * radius;       // Rim height  
+    channel_width = height * 0.089;  // Width of channel at top part of saucer
 
     // Main saucer shape  
-    translate([0,0,(height+h2)/-2]) tube(h=h2, or1=radius, or2=rad2, wall=w);   // Bottom Rim
-    translate([0,0,(height-w)/2]) tube(l=w, or=rad1, ir=hole);  // Top Plate 
-    translate([0,0,(height/2)-w]) tube(l=2, or=rad1*1.25, ir=hole);     // Inner Plate
+    translate([0,0,(height+h2)/-2]) tube(h=h2, or1=radius, or2=rad2, wall=wall);   // Bottom Rim
+    translate([0,0,(height-wall)/2]) tube(l=wall, or=rad1, ir=hole);  // Top Plate 
+    
+    // "stripe" around middle of saucer
+    plate_height=height*.5;
+    translate([0,0,0]) { 
+        color("LightBlue", 1.0) tube(h=channel_width, or1=rad2*.745, or2=rad1*1.64, wall=wall);  // Top Plate and channel interior
+        translate([0,0,(channel_width/-2)])
+            tube(h=channel_width*.25, or=rad2*.743, ir=rad2*.7);
+    }
 
     // Saucer main shell
     diff()
-    tube(h=height, or1=rad2, or2=rad1, wall=w) {
-        ov = 1.0;
+    tube(h=height, or1=rad2, or2=rad1, wall=wall) {
+        ov = 1.0;   // TODO: causes issues with inset on doors at different scales
         tag("remove") {
             attach([0,1,0], overlap=ov) bay_door_blank();
             attach([1,0,0], overlap=ov) bay_door_blank();
             attach([0,-1,0], overlap=ov) bay_door_blank();
-            attach([-1,0,0], overlap=ov) bay_door_blank();            
-            // TODO: Indent ring around upper Saucer here
+            attach([-1,0,0], overlap=ov) bay_door_blank();   
+            // TODO: Cut-out spot inbetween doors for wide strip thingy         
         }
         tag("keep") {
             attach([0,1,0], overlap=ov*2.5) bay_door();
             attach([1,0,0], overlap=ov*2.5) bay_door();
             attach([0,-1,0], overlap=ov*2.5) bay_door();
             attach([-1,0,0], overlap=ov*2.5) bay_door();
+            // TODO: Add in wide strip thingy between doors
         }
     }
 
@@ -46,7 +54,7 @@ module saucer(radius, height) {
                 color("LightBlue", 1.0)
                 cube([door_length, door_length, door_depth], center=true);  // "floor" 
                 gap = 0.02 * door_length;  
-                translate([0, 0, gap*2.5]) color("White", 1.0) cube([gap, door_length, gap], center=true);
+                translate([0, 0, gap*2.5]) cube([gap, door_length, gap], center=true);
             }
         }
     }
@@ -76,4 +84,4 @@ module saucer(radius, height) {
 }
 
 // Construction
-saucer(radius, height);
+saucer(radius, saucer_height);
