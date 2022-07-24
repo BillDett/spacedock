@@ -6,6 +6,7 @@
 radius = 100; // Radius of the main Saucer
 saucer_height = 0.27142 * radius;       // Saucer height to bottom of rim
 wall = .06 * radius;                    // How thick should interior walls be?
+hole = 0.05 * radius;                   // Center hole radius
 saucer_total_height = saucer_height/1.6;  // TODO: Figure out how make this exact
 
 // Lower Saucer
@@ -25,7 +26,7 @@ neck_total_height = (neck_lip_height*2) + neck_height;
 shoulder_top_radius = 0.3158 * radius;
 shoulder_bottom_radius = 0.5158 * radius;
 bottom_cut_height = 0.08064 * shoulder_bottom_radius;   // How far above zorigin to begin bottom cut
-top_cut_height = 0.7096 * shoulder_bottom_radius;       // How far above zorigin to begin top cut
+top_cut_height = 0.8096 * shoulder_bottom_radius;       // How far above zorigin to begin top cut
 shoulder_total_height = top_cut_height - bottom_cut_height;
 
 // Legs
@@ -72,4 +73,4 @@ ball_trench_height = 0.0315 * radius;
 
 $fa=1;
 $fs=0.01;
-$fn=50;
+$fn=100;
