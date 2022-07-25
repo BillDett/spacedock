@@ -3,16 +3,6 @@ include <dimensions.scad>
 
 module shoulder() {
 
-    lower_angle = 9;
-    upper_angle = 48;
-
-    // How far off zorigin is bottom and top of dome after we rotate the arc?
-    // We use these 'fudge factors' to accommodate the arc width so we can put it close to z=0
-    dome_bottom_offset = hyp_ang_to_opp(shoulder_bottom_radius, lower_angle*.6); 
-    dome_top_offset = hyp_ang_to_opp(shoulder_bottom_radius, upper_angle*1.05);  
-
-    // Overall height of the dome
-    dome_height = dome_top_offset-dome_bottom_offset;
     upper_radius=cos(upper_angle*0.95) * dome_top_offset;
     lower_radius = hyp_ang_to_adj(shoulder_bottom_radius, lower_angle);
 
