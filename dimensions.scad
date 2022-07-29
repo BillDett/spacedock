@@ -5,7 +5,7 @@
 // Saucer
 radius = 100; // Radius of the main Saucer
 saucer_height = 0.27142 * radius;       // Saucer height to bottom of rim
-wall = .06 * radius;                    // How thick should interior walls be?
+wall = .05 * radius;                    // How thick should interior walls be?
 hole = 0.05 * radius;                   // Center hole radius
 saucer_total_height = saucer_height/1.6;  // TODO: Figure out how make this exact
 
@@ -38,7 +38,7 @@ shoulder_total_height=dome_height;
 
 // Legs
 l10_radius = 0.1632 * radius;
-l10_height = 0.0158 * radius;
+l10_height = 0.0258 * radius;
 l10_start = l10_height/2;
 
 l9_radius = 0.1736 * radius;
@@ -82,12 +82,13 @@ l1_start = l1_height/2 + l2_height  + l3_height + l4_height + l5_height + l6_hei
 legs_total_height = l1_height + l2_height  + l3_height + l4_height + l5_height + l6_height + l7_height + l8_height + l9_height + l10_height;
 
 // Ball
-ball_top_radius = 0.1684 * radius;
+//ball_top_radius = 0.1684 * radius;
+ball_top_radius = l10_radius*1.2;
 ball_bottom_radius = 0.2631 * radius;
 ball_height = 0.1979 * radius;
-ball_total_height = 0.1979 * radius;
+ball_total_height = 0.1979 * radius;  // TODO: wrong
 
-ball_trench_radius = 0.2631 * radius;
+ball_trench_radius = ball_bottom_radius;
 ball_trench_height = 0.0315 * radius;
 
 
