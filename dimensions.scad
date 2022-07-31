@@ -5,9 +5,10 @@
 // Saucer
 radius = 100; // Radius of the main Saucer
 saucer_height = 0.27142 * radius;       // Saucer height to bottom of rim
+saucer_rim_height = 0.2 * saucer_height;  // Rim around bottom of saucer
 wall = .05 * radius;                    // How thick should interior walls be?
 hole = 0.05 * radius;                   // Center hole radius
-saucer_total_height = saucer_height/1.6;  // TODO: Figure out how make this exact
+saucer_total_height = saucer_height + saucer_rim_height;
 
 // Lower Saucer
 lower_saucer_top_radius = 0.6211 * radius;

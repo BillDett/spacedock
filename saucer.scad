@@ -1,53 +1,58 @@
 include <BOSL2/std.scad>
 include <dimensions.scad>
 
-module saucer(radius, height) {
-    // All measurements are based on radius
+module saucer() {
+
     hole = 0.03 * radius;
     rad1 = .41428 * radius;    // Top radius
     rad2 = 0.98571 * radius;    // Rim radius
-    h2 = 0.04857 * radius;       // Rim height  
-    channel_width = height * 0.089;  // Width of channel at top part of saucer
-
-    // Main saucer shape  
-    translate([0,0,(height+h2)/-2]) tube(h=h2, or1=radius, or2=rad2, wall=wall);   // Bottom Rim
-    translate([0,0,(height-wall)/2]) tube(l=wall, or=rad1, ir=hole);  // Top Plate 
-    
-    // "stripe" around middle of saucer
-    plate_height=height*.5;
-    translate([0,0,0]) { 
-        color("LightBlue", 1.0) tube(h=channel_width, or1=rad2*.745, or2=rad1*1.64, wall=wall);  // Top Plate and channel interior
-        translate([0,0,(channel_width/-2)])
-            tube(h=channel_width*.25, or=rad2*.743, ir=rad2*.7);
-    }
-
-    // Saucer main shell
-    diff()
-    tube(h=height, or1=rad2, or2=rad1, wall=wall) {
-        ov = 1.0;   // TODO: causes issues with inset on doors at different scales
-        tag("remove") {
-            attach([0,1,0], overlap=ov) bay_door_blank();
-            attach([1,0,0], overlap=ov) bay_door_blank();
-            attach([0,-1,0], overlap=ov) bay_door_blank();
-            attach([-1,0,0], overlap=ov) bay_door_blank();   
-            // TODO: Cut-out spot inbetween doors for wide strip thingy         
-        }
-        tag("keep") {
-            attach([0,1,0], overlap=ov*2.5) bay_door();
-            attach([1,0,0], overlap=ov*2.5) bay_door();
-            attach([0,-1,0], overlap=ov*2.5) bay_door();
-            attach([-1,0,0], overlap=ov*2.5) bay_door();
-            // TODO: Add in wide strip thingy between doors
-        }
-    }
-
-    // Top
-    translate([0,0,(height/1.7)]) saucer_top();
+    channel_width = saucer_height * 0.089;  // Width of channel at top part of saucer
 
     // Bay Doors
     door_length = 0.1842 * radius;       // Side length of door
     door_depth = 0.1 * door_length;
-    door_ypos = height/-1.5;
+    door_ypos = saucer_height/-1.5;
+
+    translate([0,0,saucer_total_height/1.7]) {
+
+        // Saucer main shell
+        diff()
+        tube(h=saucer_height, or1=rad2, or2=rad1, wall=wall) {
+            ov = 1.0;   // TODO: causes issues with inset on doors at different scales
+            tag("remove") {
+                attach([0,1,0], overlap=ov) bay_door_blank();
+                attach([1,0,0], overlap=ov) bay_door_blank();
+                attach([0,-1,0], overlap=ov) bay_door_blank();
+                attach([-1,0,0], overlap=ov) bay_door_blank();   
+                // TODO: Cut-out spot inbetween doors for wide strip thingy         
+            }
+            tag("keep") {
+                attach([0,1,0], overlap=ov*2.5) bay_door();
+                attach([1,0,0], overlap=ov*2.5) bay_door();
+                attach([0,-1,0], overlap=ov*2.5) bay_door();
+                attach([-1,0,0], overlap=ov*2.5) bay_door();
+                // TODO: Add in wide strip thingy between doors
+            }
+        }
+
+        // Bottom Rim
+        translate([0,0,(saucer_height+saucer_rim_height)/-2])
+            tube(h=saucer_rim_height, or1=radius, or2=rad2, wall=wall);   
+        
+        // Top Plate
+        translate([0,0,saucer_height/2.6]) cyl(h=wall, r=rad1)
+            attach([0,0,1], overlap=-3) saucer_top();   // NOTE: using negative overlap here to keep it from 'sinking' into the top plate
+        
+        // "stripe" around middle of saucer
+        plate_height=saucer_height*.5;
+        translate([0,0,0]) { 
+            color("LightBlue", 1.0) tube(h=channel_width, or1=rad2*.745, or2=rad1*1.64, wall=wall);  // Top Plate and channel interior
+            translate([0,0,(channel_width/-2)])
+                tube(h=channel_width*.25, or=rad2*.743, ir=rad2*.7);
+        }
+ 
+    }
+
     module bay_door() {
         translate([0,door_ypos,0]) {
         difference() {
@@ -84,4 +89,4 @@ module saucer(radius, height) {
 }
 
 // Construction
-saucer(radius, saucer_height);
+saucer();
