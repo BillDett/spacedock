@@ -8,6 +8,7 @@ module saucer(radius, height) {
     rad2 = 0.98571 * radius;    // Rim radius
     h2 = 0.04857 * radius;       // Rim height  
     channel_width = height * 0.089;  // Width of channel at top part of saucer
+    window_radius = rad2 * 0.9;     // Radius of window "strip"
 
     // Main saucer shape  
     translate([0,0,(height+h2)/-2]) tube(h=h2, or1=radius, or2=rad2, wall=wall);   // Bottom Rim
@@ -29,7 +30,8 @@ module saucer(radius, height) {
             attach([0,1,0], overlap=ov) bay_door_blank();
             attach([1,0,0], overlap=ov) bay_door_blank();
             attach([0,-1,0], overlap=ov) bay_door_blank();
-            attach([-1,0,0], overlap=ov) bay_door_blank();   
+            attach([-1,0,0], overlap=ov) bay_door_blank(); 
+            window_blanks();  
             // TODO: Cut-out spot inbetween doors for wide strip thingy         
         }
         tag("keep") {
@@ -43,6 +45,9 @@ module saucer(radius, height) {
 
     // Top
     translate([0,0,(height/1.7)]) saucer_top();
+
+    // Windows 
+    windows();
 
     // Bay Doors
     door_length = 0.1842 * radius;       // Side length of door
@@ -61,6 +66,28 @@ module saucer(radius, height) {
     module bay_door_blank() {
         translate([0,door_ypos,0])
             cube([door_length,door_length,door_depth*3], center=true);
+    }
+
+    // Windows
+    // These are the cutouts for the larger 'bay' windows between 2 of the doors
+    window_angle = 20;
+    module window_blanks() {
+        translate([0,0,height*-0.35]) {
+            pie_slice(h=wall*0.4, r=window_radius, ang=window_angle, spin=35);
+            pie_slice(h=wall*0.4, r=window_radius, ang=window_angle, spin=215);
+        }
+    }
+
+    // Window insets (5 window panes)
+    module windows() {
+        translate([0,0,height*-0.37]) {
+            path1 = arc(r=window_radius*.96, start=35, angle=window_angle*.85);
+            path2 = arc(r=window_radius*.96, start=215, angle=window_angle*.85);
+            color("LightGreen", 1.0) {
+                path_spread(path1, n=5) cube([wall*.9, wall*.5, wall*.5]);
+                path_spread(path2, n=5) cube([wall*.9, wall*.5, wall*.5]);
+            }
+        }
     }
 
     // Top 'crown' section

@@ -7,6 +7,7 @@ use <ball.scad>
 include <dimensions.scad>
 
 // TODO: Stacking up these parts is broken- need something better
+//  MAYBE USE distribute()? https://github.com/revarbat/BOSL2/wiki/distributors.scad#module-distribute
 
 #translate([0,0,-saucer_total_height/2])
     saucer(radius, saucer_height);
