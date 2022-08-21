@@ -25,9 +25,12 @@ module ball() {
 
     module upper_ball() {
         half_dome();
-        translate([0,0,ball_trench_height/-2])
+        translate([0,0,ball_trench_height/-2]) {
             tube(h=ball_trench_height, or=ball_trench_radius, wall=wall*.5);    // "trench"
-            // TODO: Add some detail here to the trench...
+            zrot_copies(n=180, r=ball_trench_radius*1.01)
+                zrot(90) color("LightBlue", 1.0)
+                    cube([wall*.1,wall*.1,ball_trench_height],center=true);     // "ribbing" around trench
+        }       
     }
 
     module lower_ball() {
