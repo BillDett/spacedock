@@ -17,48 +17,43 @@ module saucer() {
     // Windows
     window_angle = 20;
 
-    // Main saucer shape  
-    translate([0,0,saucer_total_height/1.7]) {
+    // Saucer main shell
+    diff()
+    tube(h=saucer_height, or1=rad2, or2=rad1, wall=wall) {
+        ov = 1.0;   // TODO: causes issues with inset on doors at different scales
+        tag("remove") {
+            attach([0,1,0], overlap=ov) bay_door_blank();
+            attach([1,0,0], overlap=ov) bay_door_blank();
+            attach([0,-1,0], overlap=ov) bay_door_blank();
+            attach([-1,0,0], overlap=ov) bay_door_blank(); 
+            window_blanks();  
+            // TODO: Cut-out spot inbetween doors for wide strip thingy         
+        }
+        tag("keep") {
+            attach([0,1,0], overlap=ov*2.5) bay_door();
+            attach([1,0,0], overlap=ov*2.5) bay_door();
+            attach([0,-1,0], overlap=ov*2.5) bay_door();
+            attach([-1,0,0], overlap=ov*2.5) bay_door();
+            windows();
+            // TODO: Add in wide strip thingy between doors
+        }
+    }
 
-         // Saucer main shell
-         diff()
-         tube(h=saucer_height, or1=rad2, or2=rad1, wall=wall) {
-             ov = 1.0;   // TODO: causes issues with inset on doors at different scales
-             tag("remove") {
-                 attach([0,1,0], overlap=ov) bay_door_blank();
-                 attach([1,0,0], overlap=ov) bay_door_blank();
-                 attach([0,-1,0], overlap=ov) bay_door_blank();
-                 attach([-1,0,0], overlap=ov) bay_door_blank(); 
-                 window_blanks();  
-                 // TODO: Cut-out spot inbetween doors for wide strip thingy         
-             }
-             tag("keep") {
-                 attach([0,1,0], overlap=ov*2.5) bay_door();
-                 attach([1,0,0], overlap=ov*2.5) bay_door();
-                 attach([0,-1,0], overlap=ov*2.5) bay_door();
-                 attach([-1,0,0], overlap=ov*2.5) bay_door();
-                 windows();
-                 // TODO: Add in wide strip thingy between doors
-             }
-         }
+    // Bottom Rim
+    translate([0,0,(saucer_height+saucer_rim_height)/-2])
+        tube(h=saucer_rim_height, or1=radius, or2=rad2, wall=wall);   
 
-         // Bottom Rim
-         translate([0,0,(saucer_height+saucer_rim_height)/-2])
-             tube(h=saucer_rim_height, or1=radius, or2=rad2, wall=wall);   
+    // Top Plate
+    translate([0,0,saucer_height/2.6]) cyl(h=wall, r=rad1)
+        attach([0,0,1], overlap=-3) saucer_top();   // NOTE: using negative overlap here to keep it from 'sinking' into the top plate
 
-         // Top Plate
-         translate([0,0,saucer_height/2.6]) cyl(h=wall, r=rad1)
-             attach([0,0,1], overlap=-3) saucer_top();   // NOTE: using negative overlap here to keep it from 'sinking' into the top plate
-
-         // "stripe" around middle of saucer
-         plate_height=saucer_height*.5;
-         translate([0,0,0]) { 
-             color("LightBlue", 1.0) tube(h=channel_width, or1=rad2*.745, or2=rad1*1.64, wall=wall);  // Top Plate and channel interior
-             translate([0,0,(channel_width/-2)])
-                 tube(h=channel_width*.25, or=rad2*.743, ir=rad2*.7);
-         }
-
-     }
+    // "stripe" around middle of saucer
+    plate_height=saucer_height*.5;
+    translate([0,0,0]) { 
+        color("LightBlue", 1.0) tube(h=channel_width, or1=rad2*.745, or2=rad1*1.64, wall=wall);  // Top Plate and channel interior
+        translate([0,0,(channel_width/-2)])
+            tube(h=channel_width*.25, or=rad2*.743, ir=rad2*.7);
+    }
 
     // Center Strip
     // TODO: Center 'strip' like Windows but on opposite sides (Opaque)
